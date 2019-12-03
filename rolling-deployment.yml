@@ -4,7 +4,10 @@ trigger: none
 resources:
  pipelines:
  - pipeline: build
-   source: Niadak-VM-CI
+   source: BuildWebApp
+   trigger: 
+    branches:
+    - master
 
 stages:
 - stage: Deploy
