@@ -10,7 +10,7 @@ stages:
     pool: demopool
     environment:
       name: Niadak-VM-Env
-      resourceType: VirtualMachine
+      #resourceType: VirtualMachine
     strategy:
       runOnce:
       #rolling:
