@@ -10,10 +10,11 @@ stages:
     pool: demopool
     environment:
       name: Niadak-VM-Env
-      resourceType: VirtualMachine
+      #resourceType: VirtualMachine
     strategy:
-      rolling:
-        maxParallel: 2
+      runOnce:
+      #rolling:
+        #maxParallel: 2
         preDeploy:
           steps:
             - script: echo Hello, world! This is pre-deploy
