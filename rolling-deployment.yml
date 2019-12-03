@@ -58,6 +58,7 @@ stages:
   jobs:  
   - deployment: VMDeploy
     displayName: web
+    pool: demopool
     environment:
       name: Niadak-VM-Env
       resourceType: VirtualMachine
