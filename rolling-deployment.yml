@@ -2,59 +2,8 @@
 trigger: none
 
 stages:
-- stage: Build
-  variables:
-    solution: '**/*.sln'
-    buildPlatform: 'Any CPU'
-    buildConfiguration: 'Release'
-  displayName: Build1 stage
-  jobs: 
-  - job: Build
-    displayName: CI job
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: Restore
-      inputs:
-        command: restore
-        projects: '**/*.csproj'
-
-    - task: DotNetCoreCLI@2
-      displayName: Build
-      inputs:
-        projects: '**/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-
-    - task: DotNetCoreCLI@2
-      displayName: Test
-      inputs:
-        command: test
-        projects: '**/*Tests/*.csproj'
-        arguments: '--configuration $(buildConfiguration)'
-
-
-    - task: DotNetCoreCLI@2
-      displayName: Publish
-      inputs:
-        command: publish
-        publishWebProjects: True
-        arguments: '--configuration $(buildConfiguration) --output "$(build.artifactstagingdirectory)"'
-        zipAfterPublish: True
-
-
-    - task: CopyFiles@2
-      displayName: 'Copy ARM templates'
-      inputs:
-        SourceFolder: ArmTemplates
-        TargetFolder: '$(build.artifactstagingdirectory)'
-
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Artifact'
-      inputs:
-        PathtoPublish: '$(build.artifactstagingdirectory)'
-
 - stage: Deploy
   displayName: Deploy stage
-  dependsOn: Build
   jobs:  
   - deployment: VMDeploy
     displayName: web
