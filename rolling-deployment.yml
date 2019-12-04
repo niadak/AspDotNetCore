@@ -34,7 +34,7 @@ stages:
             inputs:
               WebsiteName: 'Default Web Site'
               AddBinding: True
-              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"9091","hostname":"","sslThumbprint":"","sniFlag":false}]}'
               ParentWebsiteNameForVD: 'Default Web Site'
               ParentWebsiteNameForApplication: 'Default Web Site'
           - task: IISWebAppDeploymentOnMachineGroup@0
