@@ -15,8 +15,8 @@ stages:
   - deployment: VMDeploy
     displayName: web
     environment:
-      #name: Niadak-VM-Env
-      name: NiadakEnvironment01
+      name: Niadak-VM-Env
+      #name: NiadakEnvironment01
       resourceType: VirtualMachine
     strategy:
       runOnce:
