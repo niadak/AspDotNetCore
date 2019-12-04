@@ -1,6 +1,13 @@
 
 trigger: none
-
+resources:
+ pipelines:
+ - pipeline: build
+   source: Niadak-VM-CI
+   trigger: 
+    branches:
+    - master
+    
 stages:
 - stage: Deploy
   displayName: Deploy stage
@@ -8,40 +15,59 @@ stages:
   - deployment: VMDeploy
     displayName: web
     environment:
-      #name: Niadak-VM-Env
-      name: NiadakEnvironment01
+      name: Niadak-VM-Env
+      #name: NiadakEnvironment01
       resourceType: VirtualMachine
     strategy:
-      runOnce:
-      #rolling:
-        #maxParallel: 2
+      rolling:
+        maxParallel: 2
         preDeploy:
           steps:
+            - download: build
+              artifact: drop
             - script: echo Hello, world! This is pre-deploy
               displayName: 'Run a one-line script'
         deploy:
           steps:
-          - script: echo Hello, world! This is deploy
-            displayName: 'Run a one-line script' 
+          - task: IISWebAppManagementOnMachineGroup@0
+            displayName: 'Create Website'
+            inputs:
+              WebsiteName: 'Default Web Site'
+              AddBinding: True
+              Bindings: '{"bindings":[{"protocol":"http","ipAddress":"All Unassigned","port":"80","hostname":"","sslThumbprint":"","sniFlag":false}]}'
+              ParentWebsiteNameForVD: 'Default Web Site'
+              ParentWebsiteNameForApplication: 'Default Web Site'
+          - task: IISWebAppDeploymentOnMachineGroup@0
+            displayName: 'Deploy application to Website'
+            inputs:
+              WebSiteName: 'Default Web Site'
+              Package: '$(Pipeline.Workspace)/drop/**/*.zip'
+              TakeAppOfflineFlag: true
+              XmlVariableSubstitution: true
 
         routeTraffic:
           steps:
+            - download: build
+              artifact: drop
             - script: echo Hello, world! This is routeTraffic
               displayName: 'Run a one-line script'
 
         postRouteTraffic:
           steps:
+            - download: none
             - script: echo Hello, world! This is postRouteTraffic
               displayName: 'Run a one-line script'
 
         on:
           failure:
             steps:
+            - download: none
             - script: echo Hello, world! This is on failure
               displayName: 'Run a one-line script'
 
           success:
             steps:
+            - download: none
             - script: echo Hello, world! This is on success
               displayName: 'Run a one-line script' 
 
