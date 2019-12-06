@@ -47,11 +47,13 @@ stages:
           steps:
             - script: echo Hello, world! This is routeTraffic
               displayName: 'Run a one-line script'
+            - powershell: sleep(300)
 
         postRouteTraffic:
           steps:
             - script: echo Hello, world! This is postRouteTraffic
               displayName: 'Run a one-line script'
+            - powershell: sleep(300)
 
         on:
           failure:
